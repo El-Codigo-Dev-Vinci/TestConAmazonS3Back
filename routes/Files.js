@@ -3,15 +3,9 @@ const router = express.Router();
 const File = require('../models/File')
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
+const download = require('download-file')
 
-const { uploadFile, getFileStream, deleteFile } = require('../s3')
-
- router.get('/:key', (req, res) => {   
-   const key = req.params.key
-   const readStream = getFileStream(key)
- 
-   readStream.pipe(res)
- })
+const { uploadFile, deleteFile } = require('../s3') 
 
  router.get('/', async (req, res) => {    
    try{      
@@ -43,6 +37,7 @@ const { uploadFile, getFileStream, deleteFile } = require('../s3')
    }        
  })
 
+
  router.delete('/:key', async (req, res) => {
     try{
       const key = req.params.key;      
@@ -62,5 +57,18 @@ const { uploadFile, getFileStream, deleteFile } = require('../s3')
 
  })
 
+ router.patch('/:key', async (req, res) => {
+    try{
+      const updatedFile = await File.updateOne(
+         {key: req.params.key},
+         {$set: {fileName: req.body.fileName}}
+      )      
+
+      res.json(updatedFile)
+    }
+    catch(error){
+       res.json("Error" + error)
+    }
+ })
 
  module.exports = router;

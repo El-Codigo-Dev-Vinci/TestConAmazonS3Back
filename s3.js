@@ -41,12 +41,11 @@ function uploadFile(file) {
 exports.uploadFile = uploadFile
 
 // downloads a file from s3
-function getFileStream(fileKey) {
-    const downloadParams = {
+function getFileStream(fileKey) {    
+
+    return s3.getObject({
         Key: fileKey,
         Bucket: bucketName
-    }
-
-    return s3.getObject(downloadParams).createReadStream()
+    }).createReadStream()
 }
 exports.getFileStream = getFileStream

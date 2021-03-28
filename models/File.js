@@ -8,14 +8,17 @@ const FileSchema = new mongoose.Schema({
     },
     fileName:{
         type: String,
-        require:true,
-        unique:true 
+        require:true,        
     },
     linkFile:{
         type: String,
         require:true,
         unique:true
-    }     
+    },
+    creationDate:{
+        type: Date,
+        require: true,        
+    }
 })
 
 module.exports = mongoose.model('File', FileSchema);

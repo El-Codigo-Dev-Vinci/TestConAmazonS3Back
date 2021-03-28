@@ -15,7 +15,12 @@ const FileSchema = new mongoose.Schema({
         type: String,
         require:true,
         unique:true
-    }     
+    },
+    creationDate:{
+        type: Date,
+        require: true,
+        unique:true
+    }
 })
 
 module.exports = mongoose.model('File', FileSchema);

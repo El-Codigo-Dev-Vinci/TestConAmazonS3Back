@@ -8,8 +8,7 @@ const FileSchema = new mongoose.Schema({
     },
     fileName:{
         type: String,
-        require:true,
-        unique:true 
+        require:true,        
     },
     linkFile:{
         type: String,
@@ -18,8 +17,7 @@ const FileSchema = new mongoose.Schema({
     },
     creationDate:{
         type: Date,
-        require: true,
-        unique:true
+        require: true,        
     }
 })
 

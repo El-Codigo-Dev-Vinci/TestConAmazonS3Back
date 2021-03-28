@@ -4,7 +4,7 @@ const File = require('../models/File')
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
-const { uploadFile, getFileStream } = require('../s3')
+const { uploadFile, getFileStream, deleteFile } = require('../s3')
 
  router.get('/:key', (req, res) => {   
    const key = req.params.key
@@ -33,7 +33,7 @@ const { uploadFile, getFileStream } = require('../s3')
       linkFile: result.Location,
       creationDate: req.body.creationDate
    })
-   console.log(req.body.creationDate)
+
    try{
       const response = await newFile.save();
       res.status(201).json(response)
@@ -43,6 +43,24 @@ const { uploadFile, getFileStream } = require('../s3')
    }        
  })
 
+ router.delete('/:key', async (req, res) => {
+    try{
+      const key = req.params.key;      
+      const removedFile = await File.remove({ key: key })
+      if (!removedFile) {
+         return res
+           .status(404)
+           .send({ error: `The file doesn't exist` });
+      }
+
+      await deleteFile(key)      
+      res.status(200).json(removedFile)
+   }
+   catch(error){
+      res.json("Error: " + error)
+   }
+
+ })
 
 
  module.exports = router;

@@ -14,14 +14,17 @@ const s3 = new S3({
     secretAccessKey
 })
 
-//get all files from s3
-function getAllFiles(){
-    return s3.listObjectsV2({
-        Bucket: bucketName
-    }).promise()
+//delete a file to s3
+function deleteFile(key){
+
+
+    s3.deleteObject({
+        Bucket: bucketName,
+        Key: key
+    }).promise();
 }
 
-exports.getAllFiles = getAllFiles 
+exports.deleteFile = deleteFile
 
 //uploads a file to s3
 function uploadFile(file) {

@@ -6,10 +6,12 @@ const cors = require('cors');
 const app = express();
 let port = process.env.PORT || 3001;
 
-mongoose.connect('mongodb://localhost/motivation', {
+mongoose.connect(process.env.DB_CONNECTION, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+    useUnifiedTopology: true    
+    },
+    () => console.log("Listening on port 3001")
+)
 
 const db = mongoose.connection;
 
@@ -21,4 +23,4 @@ app.use(bodyParser.json());
 app.use(cors())
 app.use('/files', FileRoute)
 
-app.listen(port, console.log("Listening on port 3001"))
+app.listen(port)

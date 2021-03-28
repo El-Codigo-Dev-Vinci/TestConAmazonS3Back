@@ -14,6 +14,15 @@ const s3 = new S3({
     secretAccessKey
 })
 
+//get all files from s3
+function getAllFiles(){
+    return s3.listObjectsV2({
+        Bucket: bucketName
+    }).promise()
+}
+
+exports.getAllFiles = getAllFiles 
+
 //uploads a file to s3
 function uploadFile(file) {
     const fileStream = fs.createReadStream(file.path)

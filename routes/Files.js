@@ -1,33 +1,46 @@
 const express = require('express')
 const router = express.Router();
-const File = require('../models/File');
-const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const File = require('../models/File')
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
-const { uploadFile } = require('../s3')
+const { uploadFile, getFileStream } = require('../s3')
 
- router.get('/:key', (req, res) => {     
-    res.send("Get all routes")
+ router.get('/:key', (req, res) => {   
+   const key = req.params.key
+   const readStream = getFileStream(key)
+ 
+   readStream.pipe(res)
+ })
+
+ router.get('/', async (req, res) => {    
+   try{      
+      const response = await File.find();
+      res.status(200).json(response)
+   }
+   catch(error){
+      res.send("Try later: "+ error)
+   }   
  })
 
  router.post('/', upload.single('file'), async (req, res) => {    
-   const file = req.file   
-   const result = await uploadFile(file)
-   const newFile = new File({
-      key:result.Key,
-      fileName: file.originalname,
-      linkFile: result.Location
-   })
-   console.log(newFile)
-   console.log(result)
+   console.log(req)
+   const file = req.file
+   //console.log(file)
+   //const result = await uploadFile(file)
+   // const newFile = new File({
+   //    key:result.Key,
+   //    fileName: file.originalname,
+   //    linkFile: result.Location
+   // })
+
    try{
-      const savedFile = await newFile.save();
-      res.json(savedFile);
+      //const response = await newFile.save();
+      res.status(201)//.json(response)
+      
    }catch(err){
-      res.json({message: err});
-   }
-    //const newFile = new File(file)
-    res.send("was fine")
+      res.send("Error: "+ err);
+   }        
  })
 
 

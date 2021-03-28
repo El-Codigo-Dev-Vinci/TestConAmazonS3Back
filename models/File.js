@@ -1,9 +1,21 @@
 const mongoose = require('mongoose');
 
 const FileSchema = new mongoose.Schema({
-    key: String,
-    fileName: String,
-    linkFile: String    
+    key: {
+        type: String,
+        require:true,
+        unique:true
+    },
+    fileName:{
+        type: String,
+        require:true,
+        unique:true 
+    },
+    linkFile:{
+        type: String,
+        require:true,
+        unique:true
+    }     
 })
 
 module.exports = mongoose.model('File', FileSchema);

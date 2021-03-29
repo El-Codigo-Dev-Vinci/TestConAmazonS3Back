@@ -3,9 +3,11 @@ const router = express.Router();
 const File = require('../models/File')
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
-const download = require('download-file')
+const path = require('path').resolve(__dirname, '..')
 
-const { uploadFile, deleteFile } = require('../s3') 
+
+
+const { uploadFile, deleteFile, getFileStream } = require('../s3') 
 
  router.get('/', async (req, res) => {    
    try{      
@@ -18,14 +20,15 @@ const { uploadFile, deleteFile } = require('../s3')
  })
 
  router.post('/', upload.single('file'), async (req, res) => {   
-   const file = req.file
-
+   const file = req.file   
+   
    const result = await uploadFile(file)
    const newFile = new File({
       key:result.Key,
       fileName: req.body.fileName,
       linkFile: result.Location,
-      creationDate: req.body.creationDate
+      creationDate: req.body.creationDate,
+      path: file.path,   
    })
 
    try{
@@ -37,6 +40,23 @@ const { uploadFile, deleteFile } = require('../s3')
    }        
  })
 
+ router.post('/download', async (req, res) => {   
+    
+    try{             
+      const pathFile = req.body.path
+                             
+      res.sendFile(`${path}/${pathFile}`, function (err) {
+         if (err) {
+           console.log(err)
+         } else {
+           console.log('Sent:' + pathFile)
+         }
+       })      
+      
+   }catch(err){
+      res.send("Error: "+ err);
+   }
+ })
 
  router.delete('/:key', async (req, res) => {
     try{

@@ -28,8 +28,7 @@ exports.deleteFile = deleteFile
 
 //uploads a file to s3
 function uploadFile(file) {
-    const fileStream = fs.createReadStream(file.path)
-
+    const fileStream = fs.createReadStream(file.path)    
     const uploadParams = {
         Bucket: bucketName,
         Body: fileStream,

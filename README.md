@@ -2,6 +2,7 @@
 
 ## Prerrequisitos - para instalar antes de empezar
 
+- [Node Js](https://nodejs.org/es/) (v10.19)
 - [MongoDB](https://mlab.com/)
 - [Bucket Amazon S3](https://aws.amazon.com/es/)
 - Configuración de los .env (Un ejemplo de las variables de entorno puede encontrarse en el archivo .env.example)
